@@ -14,6 +14,10 @@ base {
 loom {
 }
 
+babric {
+    disableM1Fixes.set(true)
+}
+
 repositories {
 	// Used for Nostalgia mappings.
 	maven {
@@ -38,6 +42,13 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "me.alphamode:nostalgia:${project.nostalgia_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Override ASM to support Java 25
+    implementation "org.ow2.asm:asm:${project.asm_version}"
+    implementation "org.ow2.asm:asm-analysis:${project.asm_version}"
+    implementation "org.ow2.asm:asm-commons:${project.asm_version}"
+    implementation "org.ow2.asm:asm-tree:${project.asm_version}"
+    implementation "org.ow2.asm:asm-util:${project.asm_version}"
 
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
 	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.18.0"
@@ -69,9 +80,9 @@ java {
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}" }
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
 }
 
 // configure the maven publication
