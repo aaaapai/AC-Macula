@@ -3,20 +3,33 @@ package net.mine_diver.macula.mixin;
 import net.mine_diver.macula.Shaders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GameRenderer.class)
+@Mixin(value = GameRenderer.class, priority = 10000)
 public abstract class GameRendererMixin {
+
+    @Shadow
+    private Minecraft mc;
+
+    @Shadow
+    float fogRed;
+    @Shadow
+    float fogGreen;
+    @Shadow
+    float fogBlue;
 
     @Inject(
         method = "render(FJ)V",
         at = @At("HEAD")
     )
     private void beginRender(float var1, long var2, CallbackInfo ci) {
+        // This initializes shader pack; do not check `Shaders.shaderPackLoaded` here.
         Shaders.beginRender(mc, var1, var2);
     }
 
@@ -25,8 +38,9 @@ public abstract class GameRendererMixin {
         at = @At("RETURN")
     )
     private void endRender(CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endRender();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endRender();
+        }
     }
 
     @Inject(
@@ -37,8 +51,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void setClearColor(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.setClearColor(fogRed, fogGreen, fogBlue);
+        if (Shaders.shaderPackLoaded) {
+            Shaders.setClearColor(fogRed, fogGreen, fogBlue);
+        }
     }
 
     @Inject(
@@ -50,8 +65,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void setCamera(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.setCamera(l);
+        if (Shaders.shaderPackLoaded) {
+            Shaders.setCamera(l);
+        }
     }
 
 
@@ -64,8 +80,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectTerrainBegin(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.beginTerrain();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.beginTerrain();
+        }
     }
 
 
@@ -79,8 +96,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectTerrainEnd(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endTerrain();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endTerrain();
+        }
     }
 
 
@@ -93,8 +111,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectWaterBegin1(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.beginWater();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.beginWater();
+        }
     }
 
 
@@ -108,8 +127,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectWaterEnd1(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endWater();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endWater();
+        }
     }
 
 
@@ -122,8 +142,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectWaterBegin2(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.beginWater();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.beginWater();
+        }
     }
 
 
@@ -137,8 +158,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectWaterEnd2(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endWater();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endWater();
+        }
     }
 
     @Inject(
@@ -149,8 +171,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectBeginWater3(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.beginWater();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.beginWater();
+        }
     }
 
     @Inject(
@@ -162,8 +185,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectEndWater3(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endWater();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endWater();
+        }
     }
 
     @Inject(
@@ -174,8 +198,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectBeginWeather(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.beginWeather();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.beginWeather();
+        }
     }
 
     @Inject(
@@ -187,8 +212,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectEndWeather(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endWeather();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endWeather();
+        }
     }
 
     @Inject(
@@ -199,8 +225,9 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectBeginHand(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.beginHand();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.beginHand();
+        }
     }
 
     @Inject(
@@ -212,17 +239,22 @@ public abstract class GameRendererMixin {
         )
     )
     private void injectEndHand(float l, long par2, CallbackInfo ci) {
-        if (!Shaders.shaderPackLoaded) return;
-        Shaders.endHand();
+        if (Shaders.shaderPackLoaded) {
+            Shaders.endHand();
+        }
     }
 
-    @Shadow
-    private Minecraft mc;
-
-    @Shadow
-    float fogRed;
-    @Shadow
-    float fogGreen;
-    @Shadow
-    float fogBlue;
+    @Redirect(
+        method = "setupFog",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/lwjgl/opengl/GL11;glFogi(II)V"
+        )
+    )
+    private static void redirect$glFogi(int pname, int param) {
+        if (Shaders.shaderPackLoaded) {
+            Shaders.suffix$glFogi(pname, param);
+        }
+        GL11.glFogi(pname, param);
+    }
 }

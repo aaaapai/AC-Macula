@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GL11.class)
+@Mixin(value = GL11.class, remap = false)
 public class MixinGL11 {
 
     @Inject(
@@ -27,16 +27,6 @@ public class MixinGL11 {
     private static void suffix$glDisable(int cap, CallbackInfo ci) {
         if (Shaders.shaderPackLoaded) {
             Shaders.suffix$glDisable(cap);
-        }
-    }
-
-    @Inject(
-        method = "glFogi",
-        at = @At("HEAD")
-    )
-    private static void suffix$glFogi(int pname, int param, CallbackInfo ci) {
-        if (Shaders.shaderPackLoaded) {
-            Shaders.suffix$glFogi(pname, param);
         }
     }
 }
